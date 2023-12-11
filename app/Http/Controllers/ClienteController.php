@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cliente;
+use App\Http\Requests\ClienteRequest;
 
 class ClienteController extends Controller
 {
@@ -18,18 +19,9 @@ class ClienteController extends Controller
         return view('clientes.create');         //redireciona para pagina de CREATE
     }
 
-    public function store(Request $request)
+    public function store(ClienteRequest $request)
     {
-        $request->validate([                                    //regras de validação dos dados a serem passados no request
-            'nome' => 'required',
-            'data_nascimento' => 'required|date',
-            'cpf_cnpj' => 'required|unique:clientes',
-            'foto' => 'image|mimes:jpeg,png,jpg,gif|max:2048',          //formatos aceitos de imagem
-            'nome_social' => 'nullable',
-        ]);
-
         $data = $request->all();
-
         
         if ($request->hasFile('foto')) {                                    //IF responsavel pela verificação da existência do arquivo
             $image = $request->file('foto');                                //recebimento do arquivo da requisição
@@ -37,7 +29,7 @@ class ClienteController extends Controller
             $image->move(public_path('images'), $imageName);                //move o arquivo para o Diretório de Imagens (public/images/)
             $data['foto'] = $imageName;                                     //atualiza os dados do cliente com o nome do arquivo
         }
-
+        
         Cliente::create($data);
 
         return redirect()->route('clientes.index')->with('success', 'Cliente criado com sucesso!'); //redireciona para pagina index com menssagem de sucesso
@@ -55,17 +47,10 @@ class ClienteController extends Controller
         return view('clientes.edit', compact('cliente'));       //retorna a view edit
     }
 
-    public function update(Request $request, $id)
+    public function update(ClienteRequest $request, $id)
     {
-        $request->validate([                                        //regras de validação dos dados
-            'nome' => 'required',
-            'data_nascimento' => 'required|date',
-            'cpf_cnpj' => 'required|unique:clientes,cpf_cnpj,'.$id,
-            'foto' => 'image|mimes:jpeg,png,jpg,gif|max:2048',         //formatos aceitos de imagem
-            'nome_social' => 'nullable',
-        ]);
-
         $cliente = Cliente::findOrFail($id);        //chama o cliente pelo id
+        
         $data = $request->all();
 
         
