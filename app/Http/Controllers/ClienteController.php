@@ -10,73 +10,73 @@ class ClienteController extends Controller
 {
     public function index()
     {
-        $clientes = Cliente::all();                          //chama todos os clientes
-        return view('clientes.index', compact('clientes'));  //redirecionamento para pagina index
+        $clientes = Cliente::all();                          
+        return view('clientes.index', compact('clientes'));
     }
 
     public function create()
     {
-        return view('clientes.create');         //redireciona para pagina de CREATE
+        return view('clientes.create');
     }
 
     public function store(ClienteRequest $request)
     {
         $data = $request->all();
         
-        if ($request->hasFile('foto')) {                                    //IF responsavel pela verificação da existência do arquivo
-            $image = $request->file('foto');                                //recebimento do arquivo da requisição
-            $imageName = time().'.'.$image->getClientOriginalExtension();   //gera um nome unico pra imagem
-            $image->move(public_path('images'), $imageName);                //move o arquivo para o Diretório de Imagens (public/images/)
-            $data['foto'] = $imageName;                                     //atualiza os dados do cliente com o nome do arquivo
+        if ($request->hasFile('foto')) { 
+            $image = $request->file('foto');
+            $imageName = time().'.'.$image->getClientOriginalExtension();
+            $image->move(public_path('images'), $imageName);
+            $data['foto'] = $imageName;
         }
         
         Cliente::create($data);
 
-        return redirect()->route('clientes.index')->with('success', 'Cliente criado com sucesso!'); //redireciona para pagina index com menssagem de sucesso
+        return redirect()->route('clientes.index')->with('success', 'Cliente criado com sucesso!');
     }
 
     public function show($id)
     {
-        $cliente = Cliente::findOrFail($id);                    //chama o cliente pelo ID
-        return view('clientes.show', compact('cliente'));       //retorna a view show
+        $cliente = Cliente::findOrFail($id);
+        return view('clientes.show', compact('cliente'));
     }
 
     public function edit($id)
     {
-        $cliente = Cliente::findOrFail($id);                    //chama o cliente pelo ID
-        return view('clientes.edit', compact('cliente'));       //retorna a view edit
+        $cliente = Cliente::findOrFail($id);
+        return view('clientes.edit', compact('cliente'));
     }
 
     public function update(ClienteRequest $request, $id)
     {
-        $cliente = Cliente::findOrFail($id);        //chama o cliente pelo id
+        $cliente = Cliente::findOrFail($id);
         
         $data = $request->all();
 
         
-        if ($request->hasFile('foto')) {                            //verifica se existe foto no request atual
+        if ($request->hasFile('foto')) {
 
-            if ($cliente->foto) {                                    //verifica se existia foto no cliente antes
-            unlink(public_path('images').'/'.$cliente->foto);        //deslinka a foto antiga 
+            if ($cliente->foto) {
+            unlink(public_path('images').'/'.$cliente->foto);
             }
 
-            $image = $request->file('foto');                                    //Tratamento da imagem
+            $image = $request->file('foto');
             $imageName = time().'.'.$image->getClientOriginalExtension();
             $image->move(public_path('images'), $imageName);
             $data['foto'] = $imageName;
         }
 
         
-        $cliente->update($data);                                            //atualiza as informações
+        $cliente->update($data);
 
-        return redirect()->route('clientes.index')->with('success', 'Cliente atualizado com sucesso!');         //retorna view index com menssagem de sucesso
+        return redirect()->route('clientes.index')->with('success', 'Cliente atualizado com sucesso!');
     }
 
     public function destroy($id)
     {
-        $cliente = Cliente::findOrFail($id);                                                                //chama o cliente pelo id
-        $cliente->delete();                                                                                 //deleta o cliente
+        $cliente = Cliente::findOrFail($id);
+        $cliente->delete();
 
-        return redirect()->route('clientes.index')->with('success', 'Cliente excluído com sucesso!');               //retorna com menssagem de exclusao com sucesso
+        return redirect()->route('clientes.index')->with('success', 'Cliente excluído com sucesso!');
     }
 }

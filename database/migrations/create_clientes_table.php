@@ -9,7 +9,7 @@ return new class extends Migration
     
     public function up()
 {
-    Schema::create('clientes', function (Blueprint $table) {    //cria tabela clientes necessaria para a aplicação
+    Schema::create('clientes', function (Blueprint $table) {
         $table->id();
         $table->string('nome');
         $table->date('data_nascimento');
@@ -22,6 +22,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('clientes');   //deleta se ja existir
+        Schema::dropIfExists('clientes');
     }
 };

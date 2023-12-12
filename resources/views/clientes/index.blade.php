@@ -2,18 +2,15 @@
 @extends('layouts.app')
 
 @section('content')
-    <h2 class="tittle">Listagem de Clientes</h2>
+    <h1 class="tittle">Listagem de Clientes</h2>
 
-    @if(session('success'))                 <!-- Verifica se existe uma variável de sessão chamada 'success' se ela existir renderiza um bloco HTML com fundo verde -->
-                                            <!--  Variáveis de sessão são usadas para armazenar dados temporários entre solicitações HTTP -->
+    @if(session('success'))                 
         <div class="alert alert-success">   
-            <ul>
-            <li>{{ session('success') }}</li>   
-            </ul>
+            {{ session('success') }}
         </div>
     @endif
 
-    <table class="table">                               <!-- tabela com as informações dos clientes -->
+    <table class="table table-index">
         <thead>
             <tr>
                 <th>Foto</th>
@@ -29,8 +26,8 @@
                 <tr>
 
                     <td>
-                        @if($cliente->foto)         <!-- Verifica se o cliente tem foto. Se sim exibe e se nao retorna "Sem foto" -->
-                            <img src="{{ asset('images/' . $cliente->foto) }}" alt="Foto do Cliente" style="max-width: 50px; max-height: 50px;">
+                        @if($cliente->foto)
+                            <img src="{{ asset('images/' . $cliente->foto) }}" alt="Foto do Cliente" class="rounded-image" style="max-width: 50px; max-height: 50px;">
                         @else
                             Sem foto
                         @endif
@@ -40,23 +37,23 @@
                     <td>{{ $cliente->cpf_cnpj }}</td>
                     
                     <td>{{ $cliente->nome_social }}</td>
-                    <td>
-                        <!-- botões responsaveis por encaminhar o usuario para rota de visualização, edição e delete -->
-                        <button class="btn btn-show"><a href="{{ route('clientes.show', $cliente->id) }}" class="textlink">Detalhes</a></button>
-                        <button class="btn btn-edit"><a href="{{ route('clientes.edit', $cliente->id) }}" class="textlink">Editar</a></button>
-                        
-                        <form action="{{ route('clientes.destroy', $cliente->id) }}" method="post" style="display:inline;">
+
+                    <td class="text-center">
+                        <div class="btn-group">
+                            <button class="btn btn-primary"><a href="{{ route('clientes.show', $cliente->id) }}" class="textlink">Detalhes</a></button>
+                            <button class="btn btn-edit"><a href="{{ route('clientes.edit', $cliente->id) }}" class="textlink">Editar</a></button>
+                        <form action="{{ route('clientes.destroy', $cliente->id) }}" method="post">
                             @csrf
                             @method('delete')
                             <button type="submit" class="btn btn-delete" onclick="return confirm('Deseja realmente excluir?')">Excluir</button>
                         </form>
+                        </div>
                     </td>
 
                 </tr>
             @endforeach
         </tbody>
     </table>
-    <!-- botão para ir para pagina de criação de cliente -->
     <button class="btn btn-newclient"><a href="{{ route('clientes.create') }}" class="textlink">Novo Cliente</a></button>
     
 @endsection

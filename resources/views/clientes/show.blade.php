@@ -2,13 +2,13 @@
 @extends('layouts.app')
 
 @section('content')
-    <h2>Detalhes do Cliente</h2>
+    <h2 class="tittle">Detalhes do Cliente</h2>
 <div class="container-show">
 
-    <table>
-        <td>
-        @if($cliente->foto) <!-- Verifica se o cliente tem foto. Se sim exibe e se nao retorna "Sem foto" -->
-            <img src="{{ asset('images/' . $cliente->foto) }}" alt="Foto do Cliente" style="max-width: 500px; max-height: 300px;">
+    <table class="table table-show">
+        <td class="td-img">
+        @if($cliente->foto)
+            <img src="{{ asset('images/' . $cliente->foto) }}" alt="Foto do Cliente" class="rounded-image" style="max-width: 500px; max-height: 300px;">
         @else
             Sem foto
         @endif
@@ -18,8 +18,7 @@
         <p><strong>Data de Nascimento:</strong> {{ $cliente->data_nascimento }}</p>
         <p><strong>CPF/CNPJ:</strong> {{ $cliente->cpf_cnpj }}</p>
         <p><strong>Nome Social:</strong> {{ $cliente->nome_social }}</p>
-        <button class="btn btn-save"><a href="{{ route('clientes.index') }}" class="textlink">Voltar</a></button>   
-        <!-- botão para voltar pra tela index -->
+        <button class="btn btn-primary"><a href="{{ route('clientes.index') }}" class="textlink">Voltar</a></button>   
         </td>
     </table>
     
